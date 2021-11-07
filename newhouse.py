@@ -34,7 +34,7 @@ def get_newhouse_info(city_id, city_abbr):
     # 1) $total_builds < 3k, same with https://www.ke.com, no need to divide;
     # 2) max result size limit for each page is 20;
     # 3) about 20% replications are found on website, no need to remove duplicates,
-    #    and therefore manual template "$houseType-$id" are adopted when generating $build_dict's keys;
+    #    and therefore I use template "$houseType-$id" for $build_dict's keys;
     # 4) results are certain (not randomized), no need to retry.
     payload = {
         "city_id": 110000,  # "330100",
