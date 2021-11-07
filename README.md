@@ -24,17 +24,17 @@
 - 运行相应python程序即可在data目录下生成格式为json的房源信息文件，文件中房源信息数如上表所示。
 - 以上房源数仅为程序2021年11月7日0时0分获得的结果，而贝壳网的房源数据是持续变化的，重新运行程序即可得到包含最新房源数量和信息的文件。
 - 租房API提供数据存在较多冗余，使用"house_code"字段对房源去重后为36069条，与网站实时结果差2k左右。原因具体是以下哪种仍有待研究，但不影响后期对数据的使用和分析：
-（1）API提供的数据不完整；
-（2）贝壳网租房信息本身存在冗余（如一房多挂）。
+    1. API提供的数据不完整；
+    2. 贝壳网租房信息本身存在冗余（如一房多挂）。
 
 ## TODO List
-### Python代码转R
-- https://github.com/Mounment/R-Project/tree/master/上海二手房分析
+- [ ] **Python代码转R**
+  - https://github.com/Mounment/R-Project/tree/master/上海二手房分析
 
-### 数据预处理及分析
-- https://github.com/ideaOzy/data_analysis
-- https://blog.51cto.com/u_15168725/2708108
-- https://zhuanlan.zhihu.com/p/359589517
+- [ ] **数据预处理及分析**
+  - https://github.com/ideaOzy/data_analysis
+  - https://blog.51cto.com/u_15168725/2708108
+  - https://zhuanlan.zhihu.com/p/359589517
 
 ## 参考
 - https://www.zhihu.com/question/443457100/answer/1721778654
