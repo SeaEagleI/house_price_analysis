@@ -36,7 +36,6 @@ def get_newhouse_info(city_id, city_abbr):
     # 3) about 20% replications are found on website, no need to remove duplicates,
     #    and therefore manual template "$houseType-$id" are adopted when generating $build_dict's keys;
     # 4) results are certain (not randomized), no need to retry.
-
     payload = {
         "city_id": 110000,  # "330100",
         "page": 0,
