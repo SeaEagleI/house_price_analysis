@@ -14,11 +14,11 @@
 
 ## 已实现功能
 
-|                             功能                             | 爬取房源数 |        网站实时结果（截至1107）        | API数据重复性 |     网站数据重复性     | 是否对结果去重 |
-| :----------------------------------------------------------: | :--------: | :------------------------------------: | :-----------: | :--------------------: | :------------: |
-| [获取二手房房源](https://github.com/SeaEagleI/shell_crawler/blob/master/ershoufang.py) |   91136    | [91136](https://bj.ke.com/ershoufang/) |    无重复     |         无重复         |      ---       |
-| [获取租房房源](https://github.com/SeaEagleI/shell_crawler/blob/master/zufang.py) |   36069    | [38069](https://bj.zu.ke.com/zufang/)  |    有重复     |          ---           |     已去重     |
-| [获取新房房源](https://github.com/SeaEagleI/shell_crawler/blob/master/newhouse.py) |    261     | [261](https://bj.fang.ke.com/loupan/)  |    有重复     | 有重复（存在一房多挂） |     未去重     |
+|                             功能                             | 爬取房源数 |         网站实时房源数（1107）         | API数据重复性 |     网站数据重复性     | 爬取结果去重 |
+| :----------------------------------------------------------: | :--------: | :------------------------------------: | :-----------: | :--------------------: | :----------: |
+| [获取二手房房源](https://github.com/SeaEagleI/shell_crawler/blob/master/ershoufang.py) |   91136    | [91136](https://bj.ke.com/ershoufang/) |    无重复     |         无重复         |     ---      |
+| [获取租房房源](https://github.com/SeaEagleI/shell_crawler/blob/master/zufang.py) |   36069    | [38069](https://bj.zu.ke.com/zufang/)  |    有重复     |          ---           |    已去重    |
+| [获取新房房源](https://github.com/SeaEagleI/shell_crawler/blob/master/newhouse.py) |    261     | [261](https://bj.fang.ke.com/loupan/)  |    有重复     | 有重复（存在一房多挂） |    未去重    |
 
 ### 说明
 - 运行相应python程序即可在data目录下生成格式为json的房源信息文件，文件中房源信息数如上表所示。
