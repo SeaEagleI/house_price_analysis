@@ -1,0 +1,9 @@
+data/
+logs/
+__pycache__/
+.idea/
+.git/
+
+*.log
+*.json
+*.out
