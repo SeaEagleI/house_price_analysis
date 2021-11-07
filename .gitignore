@@ -1,9 +1,10 @@
-data/
-logs/
 __pycache__/
 .idea/
 .git/
+.gitignore
 
-*.log
-*.json
-*.out
+logs/
+data/bj_ershoufang.json
+data/bj_zufang.json
+data/bj_newhouse.json
+data/zufang_20190417_2311.json

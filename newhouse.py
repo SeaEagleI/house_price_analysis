@@ -69,4 +69,4 @@ if __name__ == "__main__":
     json_file = newhouse_file.format(city_abbr)
     house_dict = json.load(open(json_file, encoding="utf-8")) if use_cache and op.exists(json_file) \
         else get_newhouse_info(city_id, city_abbr)
-    print("Crawled & Saved {} ershoufang infos.".format(len(house_dict)))
+    print("Crawled & Saved {} newhouse infos.".format(len(house_dict)))
