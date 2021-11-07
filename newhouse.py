@@ -1,4 +1,4 @@
-# 保存到csv文件
+# 北京新房总结果数小于3k, 不需要分流.
 import json
 import os.path as op
 import time
@@ -30,10 +30,13 @@ def update_total_builds(city_id):
 
 # Crawl & Save all newhouse infos to a dict
 def get_newhouse_info(city_id, city_abbr):
-    # Glad to find:
-    # 1) $total_builds < 3k, no need to divide;
-    # 2) no replications are found in this type of mobile-client api data crawling, no need to retry;
-    # 3) max result size limit for each page is 20.
+    # Patterns: (Complexity: Medium)
+    # 1) $total_builds < 3k, same with https://www.ke.com, no need to divide;
+    # 2) max result size limit for each page is 20;
+    # 3) about 20% replications are found on website, no need to remove duplicates,
+    #    and therefore manual template "$houseType-$id" are adopted when generating $build_dict's keys;
+    # 4) results are certain (not randomized), no need to retry.
+
     payload = {
         "city_id": 110000,  # "330100",
         "page": 0,

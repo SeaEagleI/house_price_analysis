@@ -1,7 +1,7 @@
 # reference: https://www.zhihu.com/question/443457100/answer/1721778654
-# 结果强卡<offset<=2999,limit<=30>, 故在不考虑重复的情况下最多只能拿到3029/38141个结果, 实际去重后在2860附近
-# 故需要通过条件组合对结果进行细粒度分流, 确保每个组合条件下的结果在3000个以内, 且所有组合加起来没有遗漏, 最后再将所有结果合并
-# 组合条件: <区域>, 将区域降到商圈级别即可保证每个筛选结果均在3k以内
+# 结果强卡<offset≤2999,limit≤30>, 在不考虑重复的情况下最多只能拿到3029/38141个结果, 实际去重后在2860附近,
+# 故需要通过条件组合对结果进行细粒度分流, 确保每个组合条件下的结果在3k以内, 且所有组合加起来没有遗漏, 最后再将所有结果合并.
+# 组合条件: <区域>, 将区域降到商圈级别即可保证每个筛选结果均在3k以内.
 import json
 import time
 import requests
@@ -35,13 +35,14 @@ def update_total_rents(city_id):
 # Crawl & Save all ershoufang house infos to a dict
 # rco11 for 最新上架, rco21 for 价格, rco31 for 面积
 def get_zufang_info(city_id, city, district_dict, bizcircle_list):
-    # Patterns:
+    # Patterns: (Complexity: Hard)
     # 1) Σ$bc_total_houses ≈ $total_rents - 2k; (API data is incomplete)
-    # 2) about 10% replications are found in this type of mobile-client api data crawling;
-    # 3) every $bc_total_rents is less than 3k (the upper bound of result size in a conditional search);
-    # 4) the $bc_total_rents varies by a large margin when payload["offset"] changes, and every time requesting
-    #    a same url can also get very different results, so I rerun the crawler 3 times for each bizcircle, 
-    #    and merge results with key "houseCode" to approximate full result.
+    # 2) every $bc_total_rents is less than 3k (the result size upper bound in a conditional search);
+    # 3) about 20% replications are found when crawling, so deploy $rent_dict and use field "house_code"
+    #    to remove duplicates;
+    # 4) results are uncertain, totally randomized: $bc_total_rents varies by a large margin when payload["offset"]
+    #    changes, and every time requesting a same url can also get very different results, so I rerun the crawler
+    #    3 times for each bizcircle, then merge results with key "house_code" to approximate full result.
     payload = {
         "city_id": city_id,
         "condition": "",  # rco11 rco21 rco31和空 替换着多搞几次

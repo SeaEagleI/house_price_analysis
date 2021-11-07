@@ -1,7 +1,7 @@
 # reference: https://github.com/CaoZ/Fast-LianJia-Crawler
 # 每组查询最多拿到3k个结果, 而二手房总数在91k+,
-# 故需要通过条件组合对结果进行细粒度分流, 确保每个组合条件下的结果在3k以内, 且所有组合加起来没有遗漏, 最后再将所有结果合并
-# 组合条件: <区域>, 将区域降到商圈级别即可保证每个筛选结果均在3k以内
+# 故需要通过条件组合对结果进行细粒度分流, 确保每个组合条件下的结果在3k以内, 且所有组合加起来没有遗漏, 最后再将所有结果合并.
+# 组合条件: <区域>, 将区域降到商圈级别即可保证每个筛选结果均在3k以内.
 import json
 import re
 import time
@@ -40,10 +40,11 @@ def update_total_houses(city_id):
 
 # Crawl & Save all ershoufang house infos to a dict
 def get_ershoufang_info(city_id, city, district_dict, bizcircle_list):
-    # Glad to find:
+    # Patterns: (Complexity: Medium)
     # 1) Σ$bc_total_houses == $total_houses;
-    # 2) no replications are found in this type of mobile-client api data crawling;
-    # 3) every $bc_total_houses is less than 3k (the upper bound of result size in a conditional search).
+    # 2) every $bc_total_houses is less than 3k (the result size upper bound in a conditional search);
+    # 3) no replications are found when crawling api data;
+    # 4) results are certain (not randomized), no need to retry.
     payload = {
         "cityId": city_id,
         "condition": "",
