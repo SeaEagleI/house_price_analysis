@@ -12,7 +12,7 @@ zufang_api = "https://app.api.ke.com/Rentplat/v2/house/list"
 newhouse_api = "https://app.api.ke.com/newhouse/shellapp/feed"
 
 # Files
-data_dir = "data"
+data_dir = "../data"
 city_info_file = op.join(data_dir, "{}_city_info.json")
 ershoufang_file = op.join(data_dir, "{}_ershoufang.json")
 zufang_file = op.join(data_dir, "{}_zufang.json")
