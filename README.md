@@ -17,9 +17,9 @@
 
 |                             功能                             | 爬取耗时 | 爬取房源数 |         网站实时房源数（1107）         | API数据重复性 |     网站数据重复性     | 爬取结果去重 |
 | :----------------------------------------------------------: | :----------------: | :--------: | :------------------------------------: | :-----------: | :--------------------: | :----------: |
-| [获取二手房房源](https://github.com/SeaEagleI/shell_crawler/blob/master/ershoufang.py) | 约40分钟           |   91136    | [91136](https://bj.ke.com/ershoufang/) |    无重复     |         无重复         |     ---      |
-| [获取租房房源](https://github.com/SeaEagleI/shell_crawler/blob/master/zufang.py) | 约40分钟           |   36069    | [38069](https://bj.zu.ke.com/zufang/)  |    有重复     |          ---           |    已去重    |
-| [获取新房房源](https://github.com/SeaEagleI/shell_crawler/blob/master/newhouse.py) | 约10秒           |    261     | [261](https://bj.fang.ke.com/loupan/)  |    有重复     | 有重复（存在一房多挂） |    未去重    |
+| [获取二手房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/ershoufang.py) | 约40分钟           |   91136    | [91136](https://bj.ke.com/ershoufang/) |    无重复     |         无重复         |     ---      |
+| [获取租房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/zufang.py) | 约40分钟           |   36069    | [38069](https://bj.zu.ke.com/zufang/)  |    有重复     |          ---           |    已去重    |
+| [获取新房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/newhouse.py) | 约10秒           |    261     | [261](https://bj.fang.ke.com/loupan/)  |    有重复     | 有重复（存在一房多挂） |    未去重    |
 
 ### 说明
 - 运行相应python程序即可在data目录下生成格式为json的房源信息文件，文件中房源信息数如上表所示。
@@ -35,6 +35,8 @@
 - https://zhuanlan.zhihu.com/p/370244126
 
 ## Part II: 数据预处理
+
+- [将爬虫爬取的json文件转为csv格式](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/json_to_csv.ipynb)
 
 ### TODO List
 1. 删除一定用不到的列
