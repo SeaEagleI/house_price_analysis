@@ -7,7 +7,7 @@ import time
 import requests
 import os.path as op
 from city import update_city
-from config import zufang_api, zufang_file, use_cache, max_retry_turns
+from config import zufang_api, zufang_json, use_cache, max_retry_turns
 
 # headers
 headers = {
@@ -100,14 +100,14 @@ def get_zufang_info(city_id, city, district_dict, bizcircle_list):
                       speed, "{:.1f}s".format(rest_cnt / speed) if speed > 0 else "---"))
     # Calc replication_ratio
     print("repl_ratio: {:.1f}%".format(repl_cnt / len(rent_dict) * 100))
-    json.dump(rent_dict, open(zufang_file.format(city.abbr), "w+", encoding="utf-8"), ensure_ascii=False, indent=4)
+    json.dump(rent_dict, open(zufang_json.format(city.abbr), "w+", encoding="utf-8"), ensure_ascii=False, indent=4)
     return rent_dict
 
 
 if __name__ == "__main__":
     city, district_dict, bizcircle_list = update_city(city_id, city_abbr)
     print()
-    json_file = zufang_file.format(city_abbr)
+    json_file = zufang_json.format(city_abbr)
     rent_dict = json.load(open(json_file, encoding="utf-8")) if use_cache and op.exists(json_file) \
         else get_zufang_info(city_id, city, district_dict, bizcircle_list)
     print("Crawled & Saved {} zufang infos.".format(len(rent_dict)))

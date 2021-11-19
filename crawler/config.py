@@ -1,5 +1,13 @@
 import os, os.path as op
 
+# City
+city_id = 110000
+city_abbr = "bj"
+
+# Task
+main_tasks = ["ershoufang", "zufang"]    # including json/csv/preprocess files
+sub_tasks = ["city_info", "complement"]  # including json file only
+
 # User Infos to generate authorization key
 user_agent = "HomeLink7.7.6; Android 7.0"
 app_id = "20161001_android"
@@ -11,22 +19,29 @@ ershoufang_api = "https://m.ke.com/liverpool/api/ershoufang/getList"
 zufang_api = "https://app.api.ke.com/Rentplat/v2/house/list"
 newhouse_api = "https://app.api.ke.com/newhouse/shellapp/feed"
 
+# Detail Urls
+ershoufang_detail_page = "https://bj.ke.com/ershoufang/{}.html"
+
 # Files
 data_dir = "../data"
-city_info_file = op.join(data_dir, "{}_city_info.json")
-ershoufang_file = op.join(data_dir, "{}_ershoufang.json")
-zufang_file = op.join(data_dir, "{}_zufang.json")
-newhouse_file = op.join(data_dir, "{}_newhouse.json")
+json_file = op.join(data_dir, "{}_{}.json")               # 1 for city_abbr, 2 for task from main_tasks & sub_tasks
+csv_file = op.join(data_dir, "{}_{}.csv")
+proc_file = op.join(data_dir, "{}_{}_preprocessed.csv")
 # Create dir
 if not op.exists(data_dir):
     os.makedirs(data_dir)
 
+# User-Agent
+user_agent_pc = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
+# Multi-Process
+num_workers = 30
 # Other Params
 use_cache = True
-turn_delay = 0.2
 max_pages = 100
 max_retry_turns = 3
 page_size_limit = 30
+turn_delays = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
+repl_dict = {r: "" for r in ["\n", "\t", "\r", " "]}
 
 # CSV fields for newhouse
 fields = ["item_type", "pid", "id", "city_id", "city_name", "cover_pic", "min_frame_area", "max_frame_area",

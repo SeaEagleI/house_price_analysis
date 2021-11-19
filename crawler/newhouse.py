@@ -3,7 +3,7 @@ import json
 import os.path as op
 import time
 import requests
-from config import newhouse_api, newhouse_file, use_cache
+from config import newhouse_api, newhouse_json, use_cache
 
 # headers
 headers = {
@@ -63,12 +63,12 @@ def get_newhouse_info(city_id, city_abbr):
     print()
     # Calc replication_ratio
     print("repl_ratio: {:.1f}%".format(repl_cnt / len(build_dict) * 100))
-    json.dump(build_dict, open(newhouse_file.format(city_abbr), "w+", encoding="utf-8"), ensure_ascii=False, indent=4)
+    json.dump(build_dict, open(newhouse_json.format(city_abbr), "w+", encoding="utf-8"), ensure_ascii=False, indent=4)
     return build_dict
 
 
 if __name__ == "__main__":
-    json_file = newhouse_file.format(city_abbr)
+    json_file = newhouse_json.format(city_abbr)
     house_dict = json.load(open(json_file, encoding="utf-8")) if use_cache and op.exists(json_file) \
         else get_newhouse_info(city_id, city_abbr)
     print("Crawled & Saved {} newhouse infos.".format(len(house_dict)))

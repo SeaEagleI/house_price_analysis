@@ -2,7 +2,7 @@ import json
 import time
 import os.path as op
 import utils
-from config import city_info_api, city_info_file, use_cache
+from config import city_info_api, city_info_json, use_cache
 
 
 class City:
@@ -72,14 +72,14 @@ def get_city_info(city_id):
             city_info['city_abbr'] = a_city['abbr']
             break
     assert 'city_abbr' in city_info, '抱歉, 链家网暂未收录该城市~'
-    json.dump(city_info, open(city_info_file.format(city_info['city_abbr']), 'w+', encoding='utf-8'), ensure_ascii=False, indent=4)
+    json.dump(city_info, open(city_info_json.format(city_info['city_abbr']), 'w+', encoding='utf-8'), ensure_ascii=False, indent=4)
     return city_info
 
 
 # Save city_info to $city, $district_dict, $bizcircle_list
 def update_city(city_id, city_abbr=''):
     print('Initializing & Updating city info ... city_id={}'.format(city_id))
-    json_file = city_info_file.format(city_abbr)
+    json_file = city_info_json.format(city_abbr)
     city_info = json.load(open(json_file, encoding='utf-8')) if use_cache and op.exists(json_file) \
         else get_city_info(city_id)
     city = City(city_info)
@@ -95,7 +95,7 @@ def update_city(city_id, city_abbr=''):
                 bizcircle_dict[bizcircle_id].district_id += [district.id]
             else:
                 bizcircle_dict[bizcircle_id] = BizCircle(city.id, district.id, biz_circle_info)
-        print('city={}, district={}, total_bizcircles={}'.format(city.name, district.name, district.biz_circles_count))
-    print('Crawled CityInfo of {}: {} districts, {} bizcircles.'.format(city.abbr, len(district_dict),
+        # print('city={}, district={}, total_bizcircles={}'.format(city.name, district.name, district.biz_circles_count))
+    print('Crawled CityInfo of {}: {} districts, {} bizcircles.\n'.format(city.abbr, len(district_dict),
                                                                         len(bizcircle_dict)))
     return city, district_dict, list(bizcircle_dict.values())
