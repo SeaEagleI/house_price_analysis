@@ -1,22 +1,3 @@
-import os, os.path as op
-
-# City
-city_id = 110000
-city_abbr = "bj"
-
-# Task
-main_tasks = ["ershoufang", "zufang"]    # including json/csv/preprocess files
-sub_tasks = ["city_info", "complement"]  # including json file only
-
-# Files
-data_dir = "../data"
-json_file = op.join(data_dir, "{}_{}.json")               # 1 for city_abbr, 2 for task from main_tasks & sub_tasks
-csv_file = op.join(data_dir, "{}_{}.csv")
-proc_file = op.join(data_dir, "{}_{}_preprocessed.csv")
-# Create dir
-if not op.exists(data_dir):
-    os.makedirs(data_dir)
-
 # Other Params
 use_config = True
 nan_values = ["None", "nan", "未知", "暂无数据"]
@@ -51,6 +32,7 @@ def li_value_counts(values):
             value_counts["None"] = value_counts.get("None", 0) + 1
         else:
             value_counts[v] = value_counts.get(v, 0) + 1
+    value_counts = dict(sorted(list(value_counts.items()), key=lambda x: x[1], reverse=True))
     return value_counts
 
 
@@ -68,8 +50,7 @@ def filter_keys(value_counts, cond):
 
 # Filter fields & value_counts by cond (for display)
 def filter_counts(value_counts, cond):
-    return {key: sorted(list(counts.items()), key=lambda x: x[1], reverse=True)
-            for key, counts in value_counts.items() if cond(counts)}
+    return {key: counts for key, counts in value_counts.items() if cond(counts)}
 
 
 
