@@ -11,7 +11,6 @@
 - 贝壳找房：https://www.ke.com
 - 北京二手房：https://bj.ke.com/ershoufang/
 - 北京租房：https://bj.zu.ke.com/zufang/
-- 北京新房：https://bj.fang.ke.com/loupan/
 
 ### 爬虫代码及爬取结果展示
 
