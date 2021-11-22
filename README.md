@@ -27,7 +27,7 @@
 - 租房API提供数据存在较多冗余，使用"house_code"字段对房源去重后为36069条，与网站实时结果差2k左右。原因具体是以下哪种仍有待研究，但不影响后期对数据的使用和分析：
     1. API提供的数据不完整；
     2. 贝壳网租房信息本身存在冗余（如一房多挂）。
-- 所有项目数据见wps共享文件夹。（涉及数据量较大，git限制上传的单个文件大小上限是50MB）
+- 项目全部数据见[wps共享文件夹](https://kdocs.cn/join/gi5qoxj)，链接永久有效。（涉及数据量较大，git限制上传的单个文件大小上限是50MB）
 
 ### 爬虫代码参考
 - https://www.zhihu.com/question/443457100/answer/1721778654
@@ -36,12 +36,8 @@
 
 ## Part II: 数据预处理
 
-- [将爬虫爬取的json文件转为csv格式](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/json_to_csv.ipynb)
-
-### TODO List
-1. 删除一定用不到的列
-2. 合并整理冗余列
-3. 缺失值处理（删除整行）
+- 文件格式转换：[将爬取的json文件转为csv](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/json2csv.py)
+- 数据整理：[删除冗余或用不到的列，对列进行整理、拆分与合并，并重命名列名](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/ershoufang.py)
 
 ## Part III: 数据分析及可视化
 
