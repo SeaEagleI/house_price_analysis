@@ -30,7 +30,11 @@ def getGeocode_gaode(address):
     base = 'http://restapi.amap.com/v3/geocode/geo'
     response = requests.get(base, parameters)
     answer = response.json()
-    return [float(i) for i in answer['geocodes'][0]['location'].split(',')]
+    try:
+        res = [float(i) for i in answer['geocodes'][0]['location'].split(',')]
+    except:
+        res = [0, 0]
+    return res
 
 
 if __name__ == "__main__":
