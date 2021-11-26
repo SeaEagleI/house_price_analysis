@@ -13,8 +13,9 @@ from tqdm import tqdm
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 from city import update_city
-from config import ershoufang_api, json_file, turn_delays, use_cache, page_size_limit, repl_dict, \
-    ershoufang_detail_page, num_workers, max_retry_turns, user_agent_pc, city_id, city_abbr
+from config import ershoufang_api, turn_delays, use_cache, page_size_limit, repl_dict, ershoufang_detail_page, \
+    num_workers, max_retry_turns, user_agent_pc
+from general_config import json_file, city_id, city_abbr
 
 # params
 task = "ershoufang"
@@ -86,7 +87,8 @@ def parse_ershoufang_page(page_url):
     # 4) 户型分间信息 (每个房间面积、是否有窗户等) **不处理**
     # 5) 小区信息 (建筑时间、均价等)
     xiaoqu_div = soup("div", attrs={"class": "xiaoqu_main fl"})[0]
-    xiaoqu_data = {pre(l.string): pre(s.string) for l, s in zip(xiaoqu_div("label"), xiaoqu_div("span"))}
+    xiaoqu_spans = [span for span in xiaoqu_div("span") if span.has_attr("class")]
+    xiaoqu_data = {pre(l.string): pre(s.string) for l, s in zip(xiaoqu_div("label"), xiaoqu_spans)}
     # 1) 小区名
     xiaoqu_data["community"] = pre(soup("a", attrs={"class": "info no_resblock_a"})[0].string)
     data.update(xiaoqu_data)
