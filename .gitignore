@@ -1,7 +1,18 @@
-__pycache__/
-.idea/
+# Git
 .git/
 .gitignore
 
-logs/
+# IDE
+.idea/
+
+# Python
+__pycache__/
+
+# Data Files
 data/
+
+# Codes
+.ipynb_checkpoints/
+
+# Logs
+logs/
