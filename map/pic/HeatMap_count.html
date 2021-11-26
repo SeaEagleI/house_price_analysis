@@ -17,7 +17,7 @@
       type="text/javascript"
       src="http://cache.amap.com/lbs/static/addToolbar.js"
     ></script>
-    <script type="text/javascript" src="HeatMap_price.js"></script>
+    <script type="text/javascript" src="../data/HeatMap_count.js"></script>
   </head>
   <body>
     <div id="container"></div>
@@ -60,7 +60,7 @@
       map.plugin(["AMap.Heatmap"], function () {
         //初始化heatmap对象
         heatmap = new AMap.Heatmap(map, {
-          radius: 10, //给定半径
+          radius: 25, //给定半径
           opacity: [0, 0.8],
           /*,
               gradient:{
@@ -75,7 +75,7 @@
         //设置数据集：该数据为北京部分“公园”数据
         heatmap.setDataSet({
           data: heatmapData,
-          max: 100,
+          max: 150,
         });
       });
 

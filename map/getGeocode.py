@@ -9,9 +9,11 @@ def getGeocode_baidu(address):
     ak = "G5MBCV9mqQ72slnMQgFy7hxGMvGkDFbL"  # 参照自己的应用
     sk = "py0kOwWshoE7FxlE3cXTqW7f9zkZpTUq"  # 参照自己的应用
     url = "http://api.map.baidu.com"
-    query = "/geocoder/v2/?address={0}&ak={1}&output=json".format(address, ak)
+    query = "/geocoder/v2/?address={0}&ak={1}&output=json&city=北京市".format(
+        address, ak)
     encodedStr = urllib.parse.quote(query, safe="/:=&?#+!$,;'@()*[]")
-    sn = hashlib.md5(urllib.parse.quote_plus(encodedStr + sk).encode()).hexdigest()
+    sn = hashlib.md5(urllib.parse.quote_plus(
+        encodedStr + sk).encode()).hexdigest()
     # 使用requests获取返回的json
     response = requests.get("{0}{1}&sn={2}".format(url, query, sn))
     data = eval(response.text)
@@ -22,10 +24,9 @@ def getGeocode_baidu(address):
 
 # 通过高德地图API获得$address字段的经纬度
 def getGeocode_gaode(address):
-    params = {'key': '2c819296021954877f97bdee73877818',
-              'address': address,
-              # 'city': city_name,
-              }
+    params = {'address': address,
+              'key': '2c819296021954877f97bdee73877818',
+              'city': '010'}
     base = 'http://restapi.amap.com/v3/geocode/geo'
     answer = requests.get(base, params).json()
     try:

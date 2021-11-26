@@ -29,11 +29,11 @@ def genJsFile(src, col, filepath, interval=0.01, api_provider="gaode"):
 
 def genJsFile2(src, filepath, interval=0.01, api_provider="gaode"):
     df = pd.read_csv(src)
-    price = df.groupby("小区")[["小区", "小区均价"]].apply(lambda i: i.iloc[0])
-    price["小区均价"] = price["小区均价"].apply(getPrice)
+    price = df.groupby("小区")[["小区", "小区均价(元/㎡)"]].apply(lambda i: i.iloc[0])
+    price["小区均价(元/㎡)"] = price["小区均价(元/㎡)"].apply(getPrice)
     price['geocode'] = price["小区"].apply(getGeocode_gaode)
-    maxv = price["小区均价"].max()
-    price["p_std"] = price["小区均价"].apply(lambda i: i/maxv*100)
+    maxv = price["小区均价(元/㎡)"].max()
+    price["p_std"] = price["小区均价(元/㎡)"].apply(lambda i: i/maxv*100)
 
     str_head = "var heatmapData = ["
     length = price.shape[0]
@@ -53,6 +53,7 @@ def genJsFile2(src, filepath, interval=0.01, api_provider="gaode"):
         f.write(result)
     return invalid
 
+
 def getPrice(raw_str):
     price = raw_str.split("元")[0]
     try:
@@ -61,7 +62,29 @@ def getPrice(raw_str):
         num = 0
     return num
 
+
+def genJsFile3(src, col, interval=0.01, api_provider="gaode"):
+    df = pd.read_csv(src, encoding="gbk")
+    for index in df["cluster"].value_counts().index:
+        data = df[df["cluster"] == index]
+        print(data.shape[0])
+        str_head = "var heatmapData = ["
+        getGeo = getGeocode_gaode if api_provider == "gaode" else getGeocode_baidu
+        for name, count in data[col].value_counts().items():
+            lng, lat = getGeo(name)
+            if (lat >= 41.7 or lat <= 39.3 or lng <= 115.6 or lng >= 117.5):
+                continue
+            item = '{' + \
+                '"lng":{0}, "lat":{1}, "count":{2}'.format(
+                    lng, lat, count) + '},'
+            str_head += item
+        result = str_head[:-1] + "]"
+        with open("data/cluster{}.js".format(index), 'w') as f:
+            f.write(result)
+
+
 if __name__ == "__main__":
     # invalid = genJsFile("../data/bj_ershoufang_preprocessed.csv", "小区", "HeatMap_count.js")
-    invalid = genJsFile2(
-        "../data/bj_ershoufang_preprocessed.csv", "HeatMap_price.js")
+    # invalid = genJsFile2(
+    #     "../data/bj_ershoufang_preprocessed.csv", "HeatMap_price.js")
+    genJsFile3("../data/bj_ershoufang_cluster.csv", "小区")

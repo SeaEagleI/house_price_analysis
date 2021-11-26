@@ -3,7 +3,7 @@ from genJsFile import genJsFile, genJsFile2
 
 def genCountMap(data_src, col, basic_map, target_name):
     target_data = target_name + ".js"
-    target_map = target_name + ".html"
+    target_map = "pic/" + target_name + ".html"
     genJsFile(data_src, col, target_data)
     with open(basic_map, "r", encoding="utf-8") as f:
         fcontent = f.read()
@@ -13,7 +13,7 @@ def genCountMap(data_src, col, basic_map, target_name):
 
 def genPriceMap(data_src, basic_map, target_name):
     target_data = target_name + ".js"
-    target_map = target_name + ".html"
+    target_map = "pic/" + target_name + ".html"
     genJsFile2(data_src, target_data)
     with open(basic_map, "r", encoding="utf-8") as f:
         fcontent = f.read()
@@ -23,5 +23,5 @@ def genPriceMap(data_src, basic_map, target_name):
 
 
 if __name__ == "__main__":
-    # genCountMap("../data/bj_ershoufang_preprocessed.csv", "小区", "basic_map.html", "HeatMap_count")
-    # genPriceMap("../data/bj_ershoufang_preprocessed.csv", "basic_map.html", "HeatMap_price")
+    # genCountMap("../data/bj_ershoufang_preprocessed.csv", "小区", "data/basic_map.html", "HeatMap_count")
+    # genPriceMap("../data/bj_ershoufang_preprocessed.csv", "data/basic_map.html", "HeatMap_price")
