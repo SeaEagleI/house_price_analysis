@@ -12,6 +12,7 @@ __pycache__/
 data/
 
 # Codes
+*.cmd
 .ipynb_checkpoints/
 
 # Logs
