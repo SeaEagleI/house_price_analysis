@@ -3,10 +3,11 @@ import os, os.path as op
 # City
 city_id = 110000
 city_abbr = "bj"
+city_name = "北京"
 
 # Task
 main_tasks = ["ershoufang", "zufang"]    # including json/csv/preprocess files
-sub_tasks = ["city_info", "complement"]  # including json file only
+sub_tasks = ["city_info", "complement", "xiaoqu_pos"]  # including json file only
 
 # Files
 data_dir = "../data"
@@ -16,3 +17,6 @@ proc_file = op.join(data_dir, "{}_{}_preprocessed.csv")
 # Create dir
 if not op.exists(data_dir):
     os.makedirs(data_dir)
+
+# CSV Values
+na_values = ["null", "None", "nan", "未知", "暂无数据"]

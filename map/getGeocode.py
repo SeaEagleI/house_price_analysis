@@ -3,6 +3,7 @@ import urllib
 import hashlib
 
 
+# 通过百度地图API获得$address字段的经纬度
 def getGeocode_baidu(address):
     # 计算校验SN(百度API文档说明需要此步骤)
     ak = "G5MBCV9mqQ72slnMQgFy7hxGMvGkDFbL"  # 参照自己的应用
@@ -10,31 +11,30 @@ def getGeocode_baidu(address):
     url = "http://api.map.baidu.com"
     query = "/geocoder/v2/?address={0}&ak={1}&output=json".format(address, ak)
     encodedStr = urllib.parse.quote(query, safe="/:=&?#+!$,;'@()*[]")
-    sn = hashlib.md5(urllib.parse.quote_plus(
-        encodedStr + sk).encode()).hexdigest()
+    sn = hashlib.md5(urllib.parse.quote_plus(encodedStr + sk).encode()).hexdigest()
     # 使用requests获取返回的json
-    try:
-        response = requests.get("{0}{1}&sn={2}".format(url, query, sn))
-        data = eval(response.text)
-        lat = data["result"]["location"]["lat"]
-        lon = data["result"]["location"]["lng"]
-    except:
-        lat = 0
-        lon = 0
+    response = requests.get("{0}{1}&sn={2}".format(url, query, sn))
+    data = eval(response.text)
+    lat = data["result"]["location"]["lat"]
+    lon = data["result"]["location"]["lng"]
     return [lon, lat]
 
 
+# 通过高德地图API获得$address字段的经纬度
 def getGeocode_gaode(address):
-    parameters = {'address': address,
-                  'key': '2c819296021954877f97bdee73877818'}
+    params = {'key': '2c819296021954877f97bdee73877818',
+              'address': address,
+              # 'city': city_name,
+              }
     base = 'http://restapi.amap.com/v3/geocode/geo'
-    response = requests.get(base, parameters)
-    answer = response.json()
+    answer = requests.get(base, params).json()
     try:
         res = [float(i) for i in answer['geocodes'][0]['location'].split(',')]
-    except:
-        res = [0, 0]
-    return res
+        return res
+    except Exception as e:
+        print(params, "\n", answer)
+        print(e)
+        exit(1)
 
 
 if __name__ == "__main__":
