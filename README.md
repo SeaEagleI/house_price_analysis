@@ -18,19 +18,19 @@
 
 - 列表爬虫：通过贝壳api获取房源编号及基本信息列表
 - 详情页爬虫：通过房源编号得出贝壳详情页url，进入详情页爬取户型、建筑结构、小区、首付等更多信息
-- 地理坐标爬虫：通过高德地图api根据每条房源的小区名获得房源的近似地理坐标（经度、纬度）
+- 地理坐标爬虫：通过高德地图api根据每条房源的小区名获得房源的近似地理经纬度（在预处理代码中实现）
 
 ### 爬虫代码及爬取结果展示
 
-|                             功能                             | 爬取耗时 | 爬取房源数 |         网站实时房源数（1107）         | API数据重复性 |     网站数据重复性     | 爬取结果去重 |
-| :----------------------------------------------------------: | :----------------: | :--------: | :------------------------------------: | :-----------: | :--------------------: | :----------: |
-| [获取二手房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/ershoufang.py) | 约40分钟           |   91136    | [91136](https://bj.ke.com/ershoufang/) |    无重复     |         无重复         |     ---      |
-| [获取租房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/zufang.py) | 约40分钟           |   36069    | [38069](https://bj.zu.ke.com/zufang/)  |    有重复     |          ---           |    已去重    |
-| [获取新房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/newhouse.py) | 约10秒           |    261     | [261](https://bj.fang.ke.com/loupan/)  |    有重复     | 有重复（存在一房多挂） |    未去重    |
+|                             功能                             | 爬取耗时 | 爬取房源数 |                   网站实时房源数                   | API数据重复性 |     网站数据重复性     | 爬取结果去重 |
+| :----------------------------------------------------------: | :------: | :--------: | :------------------------------------------------: | :-----------: | :--------------------: | :----------: |
+| [获取二手房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/ershoufang.py) | 约40分钟 |   88653    | [88653](https://bj.ke.com/ershoufang/)（11月19日） |    无重复     |         无重复         |     ---      |
+| [获取租房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/zufang.py) | 约40分钟 |   36069    |  [38069](https://bj.zu.ke.com/zufang/)（11月7日）  |    有重复     |          ---           |    已去重    |
+| [获取新房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/newhouse.py) |  约10秒  |    261     |  [261](https://bj.fang.ke.com/loupan/)（11月7日）  |    有重复     | 有重复（存在一房多挂） |    未去重    |
 
 ### 说明
 - 运行相应python程序即可在data目录下生成格式为json的房源信息文件，文件中房源信息数如上表所示。
-- 以上房源数仅为程序2021年11月7日0时0分获得的结果，而贝壳网的房源数据是持续变化的，重新运行程序即可得到包含最新房源数量和信息的文件。
+- 以上房源数仅为程序实时获得的结果，而贝壳网的房源数据是持续变化的，重新运行程序即可得到包含最新房源数量和信息的文件。
 - 租房API提供数据存在较多冗余，使用"house_code"字段对房源去重后为36069条，与网站实时结果差2k左右。原因具体是以下哪种仍有待研究，但不影响后期对数据的使用和分析：
     1. API提供的数据不完整；
     2. 贝壳网租房信息本身存在冗余（如一房多挂）。
@@ -38,8 +38,12 @@
 
 ## Part II: 数据预处理
 
-- 文件格式转换：[将爬取的json文件转为csv](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/json2csv.py)
-- 数据整理：[删除冗余或用不到的列，对列进行整理、拆分与合并，并重命名列名](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/ershoufang.py)
+- [文件格式转换](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/json2csv.py)：
+    1. 将爬取的json文件转为csv（递归处理树结构数据、使用路径重命名字段名）
+- [数据整理](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/ershoufang.py)：
+    1. 删除冗余列、无用列；
+    2. 修改列值：删除列值中的单位，并拆分、合并一些列；
+    3. 重命名列名：将英文换成中文（增加可读性），在列名中加上单位。
 
 ## Part III: 房源房价统计及对比分析
 
@@ -60,8 +64,8 @@
         - 北京二手房单价与建筑面积关系 => **散点图**
 
 - 房源、房价的区位分布：
-    1. 房源分布 => **区域热力图**
-    2. 房价分布 => **区域热力图**
+    1. 房源区位分布 => **区域热力图**
+    2. 房价区位分布 => **区域热力图**
 
 - 二手房、租房、新房间的横向对比：
     1. 三者间总数的对比 （想买房主要还是买二手房：新房房源太少） => **并列柱状图**
