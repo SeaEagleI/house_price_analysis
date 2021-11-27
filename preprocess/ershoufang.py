@@ -83,6 +83,7 @@ def preprocess(df):
         "建筑年代": lambda x: eval(remove_words(x, ["年建成", ","])) if not is_NaN(x) else x,
         "燃气价格": lambda x: eval(remove_words(x, ["元/m3", ","])) if not is_NaN(x) else x,
         "楼栋总数": lambda x: remove_words(x, ["栋"]) if not is_NaN(x) else x,
+        "配备电梯": lambda x: True if not is_NaN(x) else False,
     }
     split_fields = {
         "recoDesc": [" ", {0: "区域", 1: "商圈"}],
