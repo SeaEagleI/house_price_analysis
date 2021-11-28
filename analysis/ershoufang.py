@@ -1,172 +1,30 @@
+# 每个图包括: 1)数据分组、数据运算和聚合; 2)绘图（bar/parallel_bar/box/pie/scatter）
 import cv2
 import jieba
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
 from general_config import proc_file, city_abbr, na_values
-from analysis.config import text_fields, cut_fields, mask_image, wordcloud_image
+from analysis.config import text_fields, cut_fields, mask_image, wordcloud_image, price_by_district_image, \
+    price_by_district_box_image, unitprice_topk_communities_image
+import random
 
 task = "ershoufang"
 max_total_houses = 100000
-# 用来正常显示中文标签
-plt.rcParams["font.sans-serif"] = ["SimHei"]
-# 用来正常显示负号
+# 正常显示中文标签、负号
+plt.rcParams["font.sans-serif"] = ['KaiTi', 'SimHei', 'FangSong']  # 汉字字体,优先使用楷体，如果找不到楷体，则使用黑体
 plt.rcParams["axes.unicode_minus"] = False
+colorArr = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+rotations = [30, 45, 60]
+bar_width = 0.4
+
+# Return random color value for scatter plot
+def rand_color():
+    return "#" + "".join([random.choice(colorArr) for i in range(6)])
 
 
-# 每个图包括: 1)数据分组、数据运算和聚合; 2)绘图（bar/parallel_bar/box/pie/scatter）
-def paint(df):
-    """房源价格信息"""
-    """北京各区域二手房平均单价"""  # parallel bar
-    mean_unitprice_by_district = df["单价(元/㎡)"].groupby(df["区域"]).mean()
-    mean_unitprice_by_district.index.name = ""
-    fig = plt.figure(figsize=(12, 7))
-    ax = fig.add_subplot(111)
-    ax.set_ylabel("单价(元/平米)", fontsize=14)
-    ax.set_title("北京各区域二手房平均单价", fontsize=18)
-    mean_unitprice_by_district.plot(kind="bar", fontsize=12)
-    # plt.savefig("data_ana\\picture\\mean_price.jpg")
-    plt.show()
-    """北京各区域二手房房源数量"""
-    count_houses_by_district = df["houseCode"].groupby(df["区域"]).count()
-    count_houses_by_district.index.name = ""
-    fig = plt.figure(figsize=(12, 7))
-    ax = fig.add_subplot(111)
-    ax.set_ylabel("房源数量(套)", fontsize=14)
-    ax.set_title("北京各区域二手房房源数量", fontsize=18)
-    count_houses_by_district.plot(kind="bar", fontsize=12, grid=True)
-    plt.show()
-    """北京各区域二手房平均建筑面积"""
-    groups_area_jzmj = df["建筑面积(㎡)"].groupby(df["区域"])
-    mean_jzmj = groups_area_jzmj.mean()
-    mean_jzmj.index.name = ""
-    fig = plt.figure(figsize=(12, 7))
-    ax = fig.add_subplot(111)
-    ax.set_ylabel("建筑面积(㎡)", fontsize=14)
-    ax.set_title("北京各区域二手房平均建筑面积", fontsize=18)
-    mean_jzmj.plot(kind="bar", fontsize=12)
-    plt.show()
-    # """北京各区域平均单价和平均建筑面积"""
-    # groups_unitprice_area = df["单价(元/㎡)"].groupby(df["区域"])
-    # mean_unitprice_by_district = groups_unitprice_area.mean()
-    # mean_unitprice_by_district.index.name = ""
-    # groups_area_jzmj = df["建筑面积(㎡)"].groupby(df["区域"])
-    # mean_jzmj = groups_area_jzmj.mean()
-    # mean_jzmj.index.name = ""
-    # fig = plt.figure()
-    # ax1 = fig.add_subplot(2, 1, 1)
-    # ax1.set_ylabel("单价(元/平米)", fontsize=14)
-    # ax1.set_title("北京各区域二手房平均单价", fontsize=18)
-    # ax2 = fig.add_subplot(2, 1, 2)
-    # ax2.set_ylabel("建筑面积(㎡)", fontsize=14)
-    # ax2.set_title("北京各区域二手房平均建筑面积", fontsize=18)
-    # plt.subplots_adjust(hspace=0.4)
-    # mean_unitprice_by_district.plot(kind="bar", ax=ax1, fontsize=12)
-    # mean_jzmj.plot(kind="bar", ax=ax2, fontsize=12)
-    # plt.show()
-
-    """北京各区域二手房单价箱线图"""  # box
-    unitprice_groups_by_district = df["单价(元/㎡)"].groupby(df["区域"])
-    box_data = pd.DataFrame(list(range(max_total_houses)), columns=["tmp"])
-    for name, group in unitprice_groups_by_district:
-        box_data[name] = group
-    del box_data["tmp"]
-    fig = plt.figure(figsize=(12, 7))
-    ax = fig.add_subplot(111)
-    ax.set_ylabel("总价(万元)", fontsize=14)
-    ax.set_title("北京各区域二手房单价箱线图", fontsize=18)
-    box_data.plot(kind="box", fontsize=12, sym="r+", grid=True, ax=ax, yticks=[20000, 30000, 40000, 50000, 100000])
-    """北京各区域二手房总价箱线图"""
-    box_total_area = df["总价(万元)"].groupby(df["区域"])
-    box_data = pd.DataFrame(list(range(max_total_houses)), columns=["tmp"])
-    for name, group in box_total_area:
-        box_data[name] = group
-    del box_data["tmp"]
-    fig = plt.figure(figsize=(12, 7))
-    ax = fig.add_subplot(111)
-    ax.set_ylabel("总价(万元)", fontsize=14)
-    ax.set_title("北京各区域二手房总价箱线图", fontsize=18)
-    box_data.plot(kind="box", fontsize=12, sym="r+", grid=True, ax=ax, yticks=[0, 500, 1000, 2000, 3000, 5000, 10000])
-
-    """北京二手房小区均价最高Top20"""  # bar
-    avgprice
-
-    unitprice_top = df.sort_values(by="小区均价(元/㎡)", ascending=False)[:20]
-    # unitprice_top = unitprice_top.sort_values(by="单价(元/㎡)")
-    unitprice_top.set_index(unitprice_top["小区"], inplace=True)
-    unitprice_top.index.name = ""
-    fig = plt.figure(figsize=(12, 7))
-    ax = fig.add_subplot(111)
-    ax.set_ylabel("单价(元/平米)", fontsize=14)
-    ax.set_title("北京二手房单价最高Top20", fontsize=18)
-    unitprice_top["单价(元/㎡)"].plot(kind="bar", fontsize=12)
-    plt.show()
-
-    """北京二手房单价与建筑面积散点图"""  # scatter
-    fig = plt.figure(figsize=(12, 7))
-    ax = fig.add_subplot(111)
-    ax.set_title("北京二手房单价与建筑面积散点图", fontsize=18)
-    df.plot(x="建筑面积(㎡)", y="单价(元/㎡)", kind="scatter", grid=True, fontsize=12, ax=ax, alpha=0.4,
-            xticks=[0, 50, 100, 150, 200, 250, 300, 400, 500, 600, 700], xlim=[0, 800])
-    ax.set_xlabel("建筑面积(㎡)", fontsize=14)
-    ax.set_ylabel("单价(元/平米)", fontsize=14)
-    plt.show()
-
-    """房源基本信息"""  # pie
-    # 房屋用途分布
-
-    # 房屋户型分布
-    count_fwhx = df["房屋户型"].value_counts()[:10]
-    count_other_fwhx = pd.Series({"其他": df["房屋户型"].value_counts()[10:].count()})
-    count_fwhx = count_fwhx.append(count_other_fwhx)
-    count_fwhx.index.name = ""
-    count_fwhx.name = ""
-    fig = plt.figure(figsize=(9, 9))
-    ax = fig.add_subplot(111)
-    ax.set_title("北京二手房房屋户型占比情况", fontsize=18)
-    count_fwhx.plot(kind="pie", cmap=plt.cm.rainbow, autopct="%3.1f%%", fontsize=12)
-    plt.show()
-    # 装修情况分布
-    count_zxqk = df["装修情况"].value_counts()
-    count_zxqk.name = ""
-    fig = plt.figure(figsize=(9, 9))
-    ax = fig.add_subplot(111)
-    ax.set_title("北京二手房装修占比情况", fontsize=18)
-    count_zxqk.plot(kind="pie", cmap=plt.cm.rainbow, autopct="%3.1f%%", fontsize=12)
-    plt.show()
-    # 建筑类型分布
-    count_jzlx = df["建筑类型"].value_counts()
-    count_jzlx.name = ""
-    fig = plt.figure(figsize=(9, 9))
-    ax = fig.add_subplot(111)
-    ax.set_title("北京二手房建筑类型占比情况", fontsize=18)
-    count_jzlx.plot(kind="pie", cmap=plt.cm.rainbow, autopct="%3.1f%%", fontsize=12)
-    plt.show()
-    # 房屋朝向分布
-    count_fwcx = df["房屋朝向"].value_counts()[:15]
-    count_other_fwcx = pd.Series({"其他": df["房屋朝向"].value_counts()[15:].count()})
-    count_fwcx = count_fwcx.append(count_other_fwcx)
-    fig = plt.figure(figsize=(12, 7))
-    ax = fig.add_subplot(111)
-    ax.set_title("房源朝向分布情况", fontsize=18)
-    count_fwcx.plot(kind="bar", fontsize=12)
-    plt.show()
-    # 建筑面积分布(区间)
-    area_level = [0, 50, 100, 150, 200, 250, 300, 500, 100000]
-    label_level = ["小于50", "50-100", "100-150", "150-200", "200-250", "250-300", "300-500", "大于500"]
-    jzmj_cut = pd.cut(df["建筑面积(㎡)"], area_level, labels=label_level)
-    jzmj_result = jzmj_cut.value_counts()
-    print(jzmj_result)
-    # jzmj_result = jzmj_result.sort_values()
-    fig = plt.figure(figsize=(12, 7))
-    ax = fig.add_subplot(111)
-    ax.set_ylabel("建筑面积(㎡)", fontsize=14)
-    ax.set_title("北京二手房建筑面积分布区间", fontsize=18)
-    jzmj_result.plot(kind="pie", fontsize=12)
-    plt.show()
-
-
-# 北京二手房词云
+# 北京二手房词云 (wordcloud)
 def paint_wordcloud(df):
     # 读入数据文件, 分词并剔除停用词
     text = df[text_fields].to_csv(header=False, index=False)
@@ -195,9 +53,190 @@ def paint_wordcloud(df):
         # plt.show()
 
 
+# 房源基本信息分布 (pie, subplots=2x3)
+def paint_basic_info_distrib(df, k=8):
+    # 房屋用途分布
+    count_fwyt = df["房屋用途"].value_counts()[:k]
+    count_other_fwyt = pd.Series({"其他": df["房屋用途"].value_counts()[k:].count()})
+    count_fwyt = count_fwyt.append(count_other_fwyt)
+    count_fwyt.index.name = ""
+    count_fwyt.name = ""
+    fig = plt.figure(figsize=(20, 20), dpi=150)
+    ax = fig.add_subplot(231)
+    ax.set_title("房屋用途分布", fontsize=18)
+    count_fwyt.plot(kind="pie", cmap=plt.cm.rainbow, autopct="%3.1f%%", fontsize=12)
+    # 房屋户型分布
+    count_fwhx = df["房屋户型"].value_counts()[:k]
+    count_other_fwhx = pd.Series({"其他": df["房屋户型"].value_counts()[k:].count()})
+    count_fwhx = count_fwhx.append(count_other_fwhx)
+    count_fwhx.index.name = ""
+    count_fwhx.name = ""
+    ax = fig.add_subplot(232)
+    ax.set_title("房屋户型分布", fontsize=18)
+    count_fwhx.plot(kind="pie", cmap=plt.cm.rainbow, autopct="%3.1f%%", fontsize=12)
+    # 装修情况分布
+    count_zxqk = df["装修情况"].value_counts()
+    count_zxqk.name = ""
+    ax = fig.add_subplot(233)
+    ax.set_title("装修情况分布", fontsize=18)
+    count_zxqk.plot(kind="pie", cmap=plt.cm.rainbow, autopct="%3.1f%%", fontsize=12)
+    # 建筑类型分布
+    count_jzlx = df["建筑类型"].value_counts()
+    count_jzlx.name = ""
+    ax = fig.add_subplot(234)
+    ax.set_title("建筑类型分布", fontsize=18)
+    count_jzlx.plot(kind="pie", cmap=plt.cm.rainbow, autopct="%3.1f%%", fontsize=12)
+    # 房屋朝向分布
+    count_fwcx = df["房屋朝向"].value_counts()[:k]
+    count_other_fwcx = pd.Series({"其他": df["房屋朝向"].value_counts()[k:].count()})
+    count_fwcx = count_fwcx.append(count_other_fwcx)
+    ax = fig.add_subplot(235)
+    ax.set_title("房源朝向分布", fontsize=18)
+    count_fwcx.plot(kind="pie", cmap=plt.cm.rainbow, autopct="%3.1f%%", fontsize=12)
+    # 建筑面积分布(区间)
+    area_level = [0, 50, 100, 150, 200, 250, 300, 500, 100000]
+    label_level = ["小于50", "50-100", "100-150", "150-200", "200-300", "300-500", "大于500"]
+    jzmj_cut = pd.cut(df["建筑面积(㎡)"], area_level, labels=label_level)
+    jzmj_result = jzmj_cut.value_counts()
+    ax = fig.add_subplot(236)
+    ax.set_ylabel("建筑面积(㎡)", fontsize=14)
+    ax.set_title("建筑面积分布区间", fontsize=18)
+    jzmj_result.plot(kind="pie", cmap=plt.cm.rainbow, autopct="%3.1f%%", fontsize=12)
+    plt.show()
+
+
+# 各区域的房价、房源数量、平均建筑面积对比 (parallel_bar, par=3)
+def paint_stats_by_district(df):
+    """北京各区域二手房平均单价"""
+    mean_unitprice_by_district = df["单价(元/㎡)"].groupby(df["区域"]).mean()
+    mean_unitprice_by_district.index.name = ""
+    fig = plt.figure(figsize=(12, 7))
+    ax = fig.add_subplot(111)
+    ax.set_ylabel("单价(元/平米)", fontsize=14)
+    ax.set_title("北京各区域二手房平均单价", fontsize=18)
+    mean_unitprice_by_district.plot(kind="bar", fontsize=12)
+    # plt.savefig("data_ana\\picture\\mean_price.jpg")
+    plt.show()
+    """北京各区域二手房房源数量"""
+    count_houses_by_district = df["houseCode"].groupby(df["区域"]).count()
+    count_houses_by_district.index.name = ""
+    fig = plt.figure(figsize=(12, 7))
+    ax = fig.add_subplot(111)
+    ax.set_ylabel("房源数量(套)", fontsize=14)
+    ax.set_title("北京各区域二手房房源数量", fontsize=18)
+    count_houses_by_district.plot(kind="bar", fontsize=12, grid=True)
+    plt.show()
+    """北京各区域二手房平均建筑面积"""
+    mean_area_by_district = df["建筑面积(㎡)"].groupby(df["区域"]).mean()
+    mean_area_by_district.index.name = ""
+    fig = plt.figure(figsize=(12, 7))
+    ax = fig.add_subplot(111)
+    ax.set_ylabel("建筑面积(㎡)", fontsize=14)
+    ax.set_title("北京各区域二手房平均建筑面积", fontsize=18)
+    mean_area_by_district.plot(kind="bar", fontsize=12)
+    plt.show()
+
+
+# 北京二手房单价与建筑面积区位分布 (scatter)
+def paint_price_area_distrib(df):
+    fig = plt.figure(figsize=(12, 7))
+    ax = fig.add_subplot(111)
+    ax.set_title("北京二手房单价与建筑面积散点图", fontsize=18)
+    # colors = ["red", "green", "blue", "yellow", "purple", "black", "pink", "orange", "cyan", ]
+    # colors = [rand_color() for key in df["区域"].value_counts()]
+    for k, d in df.groupby("区域"):
+        d.plot.scatter(x="建筑面积(㎡)", y="单价(元/㎡)", c=rand_color(), label=k, colormap="gist_rainbow", grid=True,
+                       fontsize=12,
+                       ax=ax, alpha=0.4, xticks=[0, 50, 100, 150, 200, 250, 300, 400, 500, 750], xlim=[0, 1000],
+                       ylim=[0, 200000])
+    ax.set_xlabel("建筑面积(平米)", fontsize=14)
+    ax.set_ylabel("单价(元/平米)", fontsize=14)
+    plt.show()
+
+
+# 北京二手房均价最高小区TopK (parallel_bar, par=2)
+def paint_unitprice_topk_communities(df, k=10):
+    unitprice_top_communities = df.groupby(["区域", "小区"]).mean().sort_values(["小区均价(元/㎡)"], ascending=False)[
+                                    ["小区均价(元/㎡)", "建筑面积(㎡)"]][:k]
+    unitprice_top_communities.index.name = ""
+    x = np.arange(k)  # 柱状图在横坐标上的位置
+    xtick_labels = ["\n".join(indices) for indices in unitprice_top_communities.index]
+    # 绘图
+    fig = plt.figure(figsize=(14, 8), dpi=150)
+    ax1 = fig.add_subplot(111)
+    ax1.set_title(f"北京二手房单价Top{k}小区", y=1.03, fontsize=30)
+    bar1 = ax1.bar(x - bar_width / 2, unitprice_top_communities["小区均价(元/㎡)"], bar_width, color='r',
+                   label="小区均价(元/㎡)")
+    ax1.set_ylabel("小区均价(元/平米)", fontsize=22)
+    ax1.set_yticks(np.arange(9 + 1) * 25000)
+    # 显示x轴标签,即tick_label, 并调整位置使其落在两个直方图正中间
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(xtick_labels, rotation=rotations[0], fontsize=15)
+    # 第一Y轴标签、刻度颜色设置
+    # ax1.yaxis.label.set_color(bar1[0].get_facecolor())
+    ax1.tick_params(axis='y', labelsize=13)
+    # 双Y轴设置
+    ax2 = ax1.twinx()
+    bar2 = ax2.bar(x + bar_width / 2, unitprice_top_communities["建筑面积(㎡)"], bar_width, color='g', label='建筑面积(㎡)')
+    ax2.set_ylabel("平均建筑面积(平米)", fontsize=22)
+    ax2.set_yticks(np.arange(9 + 1) * 50)
+    # 第二Y轴标签、刻度颜色设置
+    ax2.yaxis.label.set_color(bar2[0].get_facecolor())
+    ax2.tick_params(axis='y', colors=bar2[0].get_facecolor(), labelsize=13)
+    # 加数据标签
+    for b in bar1:
+        ax1.text(b.get_x()+bar_width/2, b.get_height(), str(int(b.get_height())), ha="center", va="bottom")
+    for b in bar2:
+        ax2.text(b.get_x()+bar_width/2, b.get_height(), str(int(b.get_height())), ha="center", va="bottom")
+    plt.legend(handles=[bar1, bar2], fontsize=15)  # 显示图例，即label
+    plt.subplots_adjust(left=0.09, bottom=0.15, right=0.92, top=0.90)  # 调整页面边距、子图间距
+    # plt.grid("on")
+    fig.savefig(unitprice_topk_communities_image.format(k))
+    plt.show()
+
+
+# 北京各区域二手房价格箱线图 (box, subplots=2x1)
+def paint_price_by_district_box(df):
+    # 二手房单价箱线图
+    unitprice_groups_by_district = dict(sorted(list(df["单价(元/㎡)"].groupby(df["区域"])),
+                                               key=lambda x: x[1].mean(), reverse=True))
+    box_data = pd.DataFrame(list(range(max_total_houses)), columns=["tmp"])
+    for name, group in unitprice_groups_by_district.items():
+        box_data[name] = group
+    del box_data["tmp"]
+    fig = plt.figure(figsize=(20, 20), dpi=150)
+    ax = fig.add_subplot(211)
+    ax.set_title("北京各区域二手房单价箱线图", y=1.05, fontsize=45)
+    ax.set_ylabel("单价(元/平米)", fontsize=22)
+    box_data.plot(kind="box", fontsize=20, sym="r+", grid=True, ax=ax,
+                  yticks=[10000, 20000, 30000, 40000, 50000, 100000, 150000, 180000], ylim=[0, 180000])
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=rotations[-1])
+    # 二手房总价箱线图
+    totalprice_groups_by_district = dict(list(df["总价(万元)"].groupby(df["区域"])))
+    box_data = pd.DataFrame(list(range(max_total_houses)), columns=["tmp"])
+    for name in unitprice_groups_by_district:
+        box_data[name] = totalprice_groups_by_district[name]
+    del box_data["tmp"]
+    ax = fig.add_subplot(212)
+    ax.set_title("北京各区域二手房总价箱线图", y=1.05, fontsize=45)
+    ax.set_ylabel("总价(万元)", fontsize=22)
+    box_data.plot(kind="box", fontsize=20, sym="r+", grid=True, ax=ax, yticks=[0, 500, 1000, 2000, 3000, 5000, 6000],
+                  ylim=[0, 6000])
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=rotations[-1])
+    plt.subplots_adjust(left=0.08, bottom=0.07, right=0.97, top=0.93, hspace=0.42)  # 调整页面边距、子图间距
+    fig.savefig(price_by_district_box_image)
+    plt.show()
+
+
 if __name__ == "__main__":
     # 加载预处理后的csv数据, 并拓展缺失值
     filename = proc_file.format(city_abbr, task)
     df = pd.read_csv(filename, na_values=na_values)
-    print(df.info())
-    paint(df)
+    # print(df.info())
+    # paint_wordcloud(df)
+    # paint_basic_info_distrib(df)
+    # paint_stats_by_district(df)
+    # paint_price_area_distribution(df)
+    # paint_unitprice_topk_communities(df)  # √
+    # paint_price_by_district_box(df)  # √
+

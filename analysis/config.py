@@ -15,3 +15,11 @@ mask_image = op.join(res_dir, "house_logo.jpg")
 pic_dir = "pics"
 ershoufang_pic_dir = op.join(pic_dir, "ershoufang")
 wordcloud_image = op.join(ershoufang_pic_dir, "{}-{}.png")
+price_by_district_image = op.join(ershoufang_pic_dir, "price_by_district_boxplot.png")
+price_by_district_image = op.join(ershoufang_pic_dir, "price_by_district_boxplot.png")
+price_by_district_image = op.join(ershoufang_pic_dir, "price_by_district_boxplot.png")
+unitprice_topk_communities_image = op.join(ershoufang_pic_dir, "unitprice_top{}_communities_bar.png")
+price_by_district_box_image = op.join(ershoufang_pic_dir, "price_by_district_box.png")
+
+
+
