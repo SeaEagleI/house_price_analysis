@@ -224,9 +224,9 @@ if __name__ == "__main__":
     filename = proc_file.format(city_abbr, task)
     df = pd.read_csv(filename, na_values=na_values)
     # print(df.info())
-    # paint_wordcloud(df)  # √
+    paint_wordcloud(df)  # √
     paint_basic_info_distrib(df)  # √
-    # paint_stats_by_district(df)  # √
-    # paint_price_area_distrib(df)  # √
-    # paint_unitprice_topk_communities(df)  # √
-    # paint_price_by_district_distrib(df)  # √
+    paint_stats_by_district(df)  # √
+    paint_price_area_distrib(df)  # √
+    paint_unitprice_topk_communities(df)  # √
+    paint_price_by_district_distrib(df)  # √

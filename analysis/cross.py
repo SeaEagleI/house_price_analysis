@@ -13,6 +13,7 @@ plt.rcParams["font.sans-serif"] = ['KaiTi', 'SimHei', 'FangSong']  # 汉字字�
 plt.rcParams["axes.unicode_minus"] = False
 
 
+# Preprocess field "converged_rooms.area_range" values in newhouse_df to standard "area" format
 def pro(x):
     x = str(x).replace("㎡", "")
     if "-" in x:
@@ -119,5 +120,5 @@ if __name__ == "__main__":
     for task, enc in zip(cross_tasks, encodings):
         task_df_data.append(pd.read_csv(open(proc_file.format(city_abbr, task), encoding=enc), na_values=na_values))
         # print(df.info())
-    # paint_house_counts_by_district(task_df_data)  # √
-    compare_stats_by_bizcircle(task_df_data[0], task_df_data[-1])
+    paint_house_counts_by_district(task_df_data)  # √
+    compare_stats_by_bizcircle(task_df_data[0], task_df_data[-1])  # √
