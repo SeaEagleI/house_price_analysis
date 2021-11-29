@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from wordcloud import WordCloud, STOPWORDS
+from datetime import datetime
 
 from analysis.config import text_fields, cut_fields, colors, district_order, district_order_, \
     mask_image, wordcloud_image, price_by_district_distrib_image, unitprice_topk_communities_image, \
@@ -47,13 +48,14 @@ def paint_wordcloud(df):
         # plt.show()
 
 
-# 房源基本信息分布 (pie, subplots=3x3)
+# 房源基本信息分布 (pie, subplots=5x2)
 def paint_basic_info_distrib(df):
-    cols = ["房屋用途", "房屋户型", "装修情况", "配备电梯", "近地铁", "区域", "所在楼层", "楼层总数(层)", "建筑面积(㎡)"]
-    k_list = [4] + [6] * 4 + [14, 6, None, None]
-    level_list = [None] * 7 + [[0, 5, 10, 15, 20, 30, 50], [0, 50, 100, 150, 200, 300, 500, np.inf]]
-    r, c = 5, 2
-    # assert r * c == len(cols), "Error: cols length & matrix size not match"
+    cols = ["房屋用途", "房屋户型", "装修情况", "配备电梯", "近地铁", "区域", "所在楼层", "楼层总数(层)", "建筑面积(㎡)", "房屋年龄(年)"]
+    k_list = [4] + [6] * 4 + [14, 6, None, None, None]
+    level_list = [None] * 7 + [[0, 5, 10, 15, 20, 30, 50], [0, 50, 100, 150, 200, 300, 500, np.inf], [0, 5, 10, 20, 30, 50, 70, np.inf]]
+    r, c, cur_year = 5, 2, datetime.now().year
+    assert r * c == len(cols), "Error: cols length & matrix size not match"
+    df["房屋年龄(年)"] = df["建成年份"].apply(lambda x: cur_year-x)
     fig = plt.figure(figsize=(14, 35), dpi=150)
     for i, (col, k, levels) in enumerate(zip(cols, k_list, level_list)):
         title, unit = col.split("(")[0] + "分布", col.split("(")[-1].replace(")", "")
@@ -64,15 +66,15 @@ def paint_basic_info_distrib(df):
             if len(raw_value_counts) > k:
                 pie_value_counts["其他"] = raw_value_counts[k:].sum()
         else:
-            # 高离散分布（数值, 后2个）
+            # 高离散分布（数值, 后3个）
             labels = [f"{l}{unit}以上" if r == np.inf else f"{l}-{r}{unit}" for l, r in zip(levels[:-1], levels[1:])]
             pie_value_counts = pd.cut(df[col], levels, labels=labels).value_counts()
-        ax = fig.add_subplot(r * 100 + c * 10 + i + 1)
+        ax = fig.add_subplot(r, c, i + 1)
         ax.set_title(title, y=0.96, fontsize=25)
         pie_value_counts.name = ""
         # print(col, '\n', pie_value_counts)
         pie_value_counts.plot(kind="pie", colormap="rainbow", autopct="%3.1f%%", fontsize=12)
-    plt.subplots_adjust(left=0, bottom=0, right=0.99, top=0.99, wspace=0.05, hspace=0.05)  # 调整页面边距、子图间距
+    plt.subplots_adjust(left=0.01, bottom=0, right=0.98, top=0.99, wspace=0.10, hspace=0.05)  # 调整页面边距、子图间距
     fig.savefig(basic_info_distrib_image)
     plt.show()
 
@@ -222,9 +224,9 @@ if __name__ == "__main__":
     filename = proc_file.format(city_abbr, task)
     df = pd.read_csv(filename, na_values=na_values)
     # print(df.info())
-    paint_wordcloud(df)  # √
+    # paint_wordcloud(df)  # √
     paint_basic_info_distrib(df)  # √
-    paint_stats_by_district(df)  # √
-    paint_price_area_distrib(df)  # √
-    paint_unitprice_topk_communities(df)  # √
-    paint_price_by_district_distrib(df)  # √
+    # paint_stats_by_district(df)  # √
+    # paint_price_area_distrib(df)  # √
+    # paint_unitprice_topk_communities(df)  # √
+    # paint_price_by_district_distrib(df)  # √

@@ -22,9 +22,14 @@ mask_image = op.join(res_dir, "house_logo.jpg")
 # Result Pictures
 pic_dir = "pics"
 ershoufang_pic_dir = op.join(pic_dir, "ershoufang")
+cross_pic_dir = op.join(pic_dir, "cross")
+# Part 3.1: Ershoufang Task
 wordcloud_image = op.join(ershoufang_pic_dir, "wordcloud-{}.png")
 basic_info_distrib_image = op.join(ershoufang_pic_dir, "basic_info_distrib_pie.png")
 stats_by_district_image = op.join(ershoufang_pic_dir, "stats_by_district_bar.png")
 price_area_distrib_image = op.join(ershoufang_pic_dir, "price_area_distrib_scatter.png")
 unitprice_topk_communities_image = op.join(ershoufang_pic_dir, "unitprice_top{}_communities_bar.png")
 price_by_district_distrib_image = op.join(ershoufang_pic_dir, "price_by_district_box.png")
+# Part 3.3: Cross Task
+house_counts_by_district_image = op.join(cross_pic_dir, "house_counts_by_district_bar.png")
+stats_by_bizcircle_image = op.join(cross_pic_dir, "stats_by_bizcircle_line.png")
