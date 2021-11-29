@@ -51,7 +51,7 @@ def paint_wordcloud(df):
 # 房源基本信息分布 (pie, subplots=5x2)
 def paint_basic_info_distrib(df):
     cols = ["房屋用途", "房屋户型", "装修情况", "配备电梯", "近地铁", "区域", "所在楼层", "楼层总数(层)", "建筑面积(㎡)", "房屋年龄(年)"]
-    k_list = [4] + [6] * 4 + [14, 6, None, None, None]
+    k_list = [4, 12] + [6] * 3 + [14, 6, None, None, None]
     level_list = [None] * 7 + [[0, 5, 10, 15, 20, 30, 50], [0, 50, 100, 150, 200, 300, 500, np.inf], [0, 5, 10, 20, 30, 50, 70, np.inf]]
     r, c, cur_year = 5, 2, datetime.now().year
     assert r * c == len(cols), "Error: cols length & matrix size not match"
