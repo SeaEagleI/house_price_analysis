@@ -11,7 +11,7 @@ cut_fields = ["榜单标题", "房源标题"]
 district_order = ['西城', '东城', '海淀', '朝阳', '丰台', '石景山', '亦庄开发区', '昌平',
                   '通州', '大兴', '顺义', '门头沟', '怀柔', '房山', '平谷', '密云', '延庆']
 district_order_ = ['西城', '东城', '海淀', '朝阳', '丰台', '石景山', '亦庄\n开发区', '昌平',
-                  '通州', '大兴', '顺义', '门头沟', '怀柔', '房山', '平谷', '密云', '延庆']
+                   '通州', '大兴', '顺义', '门头沟', '怀柔', '房山', '平谷', '密云', '延庆']
 colors = ["red", "green", "blue", "yellow", "purple", "black", "pink", "orange",
           "cyan", "lime", "darkred", "firebrick", "olive", "crimson", "grey", "goldenrod", "m"]
 
@@ -23,13 +23,16 @@ mask_image = op.join(res_dir, "house_logo.jpg")
 pic_dir = "pics"
 ershoufang_pic_dir = op.join(pic_dir, "ershoufang")
 cross_pic_dir = op.join(pic_dir, "cross")
-# Part 3.1: Ershoufang Task
+## Part 3.1: Ershoufang Task
 wordcloud_image = op.join(ershoufang_pic_dir, "wordcloud-{}.png")
 basic_info_distrib_image = op.join(ershoufang_pic_dir, "basic_info_distrib_pie.png")
 stats_by_district_image = op.join(ershoufang_pic_dir, "stats_by_district_bar.png")
 price_area_distrib_image = op.join(ershoufang_pic_dir, "price_area_distrib_scatter.png")
 unitprice_topk_communities_image = op.join(ershoufang_pic_dir, "unitprice_top{}_communities_bar.png")
 price_by_district_distrib_image = op.join(ershoufang_pic_dir, "price_by_district_box.png")
-# Part 3.3: Cross Task
+## Part 3.3: Cross Task
 house_counts_by_district_image = op.join(cross_pic_dir, "house_counts_by_district_bar.png")
 stats_by_bizcircle_image = op.join(cross_pic_dir, "stats_by_bizcircle_line.png")
+## Part 5.1: Shoufu Problem
+shoufu_by_district_image = op.join(ershoufang_pic_dir, "shoufu_by_district_bar.png")
+shoufu_distrib_image = op.join(ershoufang_pic_dir, "shoufu_distrib_{}_{}-{}㎡_ret{}_pie.png")

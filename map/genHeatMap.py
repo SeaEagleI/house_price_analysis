@@ -23,5 +23,5 @@ def genPriceMap(data_src, basic_map, target_name):
 
 
 if __name__ == "__main__":
-    # genCountMap("../data/bj_ershoufang_preprocessed.csv", "小区", "data/basic_map.html", "HeatMap_count")
-    # genPriceMap("../data/bj_ershoufang_preprocessed.csv", "data/basic_map.html", "HeatMap_price")
+    genCountMap("../data/bj_ershoufang_preprocessed.csv", "小区", "data/basic_map.html", "HeatMap_count")
+    genPriceMap("../data/bj_ershoufang_preprocessed.csv", "data/basic_map.html", "HeatMap_price")

@@ -14,6 +14,7 @@ data_dir = "../data"
 json_file = op.join(data_dir, "{}_{}.json")               # 1 for city_abbr, 2 for task from main_tasks & sub_tasks
 csv_file = op.join(data_dir, "{}_{}.csv")
 proc_file = op.join(data_dir, "{}_{}_preprocessed.csv")
+cluster_file = op.join(data_dir, "{}_{}_cluster.csv")
 # Create dir
 if not op.exists(data_dir):
     os.makedirs(data_dir)

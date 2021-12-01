@@ -4,14 +4,13 @@ import copy
 from tqdm import tqdm
 import pyperclip
 
+from general_config import json_file, city_abbr
+
 
 # flatten dict to multiple list: enumerate all path to leave values in dict_data
 # dict_data structure: 1) key->dict_type3; 2) key->list->dict_type3; 3) key->str/int/bool/null; 4) key->list->str.
 # example for type4: field "coupon_template_id" in file bj_zufang.json .etc
 # yield/return once for each str/int/bool/null leave value recursively.
-from crawler.config import json_file, city_abbr
-
-
 def flatten_dict(data, pre=None):
     pre = pre if pre else []
     if isinstance(data, dict):
