@@ -9,7 +9,7 @@
 __pycache__/
 
 # Data Files
-data/
+/data/
 
 # Codes
 *.cmd
