@@ -1,4 +1,8 @@
-# R语言大作业：基于贝壳找房网的北京房源爬虫与房源房价分析
+# 基于贝壳找房网的北京房源爬虫、房源分析与购房租房案例研究
+
+## 项目文档
+
+- [基于贝壳找房网的北京房源与房价分析.pdf](https://github.com/SeaEagleI/house_price_analysis/blob/master/docs/基于贝壳找房网的北京房源与房价分析.pdf)
 
 ## 项目目标
 
@@ -24,9 +28,9 @@
 
 |                             功能                             | 爬取耗时 | 爬取房源数 |                   网站实时房源数                   | API数据重复性 |     网站数据重复性     | 爬取结果去重 |
 | :----------------------------------------------------------: | :------: | :--------: | :------------------------------------------------: | :-----------: | :--------------------: | :----------: |
-| [获取二手房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/ershoufang.py) | 约40分钟 |   88653    | [88653](https://bj.ke.com/ershoufang/)（11月19日） |    无重复     |         无重复         |     ---      |
-| [获取租房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/zufang.py) | 约40分钟 |   36069    |  [38069](https://bj.zu.ke.com/zufang/)（11月7日）  |    有重复     |          ---           |    已去重    |
-| [获取新房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/newhouse.py) |  约10秒  |    261     |  [261](https://bj.fang.ke.com/loupan/)（11月7日）  |    有重复     | 有重复（存在一房多挂） |    未去重    |
+| [获取二手房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/crawler/ershoufang.py) | 约40分钟 |   88653    | [88653](https://bj.ke.com/ershoufang/)（11月19日） |    无重复     |         无重复         |     ---      |
+| [获取租房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/crawler/zufang.py) | 约40分钟 |   36069    |  [38069](https://bj.zu.ke.com/zufang/)（11月7日）  |    有重复     |          ---           |    已去重    |
+| [获取新房房源](https://github.com/SeaEagleI/house_price_analysis/blob/master/crawler/newhouse.py) |  约10秒  |    261     |  [261](https://bj.fang.ke.com/loupan/)（11月7日）  |    有重复     | 有重复（存在一房多挂） |    未去重    |
 
 ### 说明
 - 运行相应python程序即可在data目录下生成格式为json的房源信息文件，文件中房源信息数如上表所示。
@@ -34,7 +38,6 @@
 - 租房API提供数据存在较多冗余，使用"house_code"字段对房源去重后为36069条，与网站实时结果差2k左右。原因具体是以下哪种仍有待研究，但不影响后期对数据的使用和分析：
     1. API提供的数据不完整；
     2. 贝壳网租房信息本身存在冗余（如一房多挂）。
-- 项目全部数据见[wps共享文件夹](https://kdocs.cn/join/gi5qoxj)，链接永久有效。（涉及数据量较大，git限制上传的单个文件大小上限是50MB）
 
 ## Part II: 数据预处理
 
@@ -47,7 +50,7 @@
 
 ## Part III: 房源房价统计及对比分析
 
-- 房源特征统计、区域比较分析（整体上/每个区域哪些特征的房子最多: 楼层？价格？房屋类型 ==> 柱状图、词云图）
+- 房源整体特征统计、区域比较分析（整体上/每个区域哪些特征的房子最多）
     1. csv文本词频统计 => **词云图**
     2. 房源基本信息统计
         - 房屋用途分布 => **饼图**
@@ -85,9 +88,9 @@
 ## Part V: Case Study
 
 - 购房案例研究：
-    1. 参数估计：在现实条件下，首付与总价差多少能保证还得起？（假设：30年还清差价，家庭年还30w，公积金共140w，30年还清）
+    1. 参数估计：在现实条件下，首付与总价差多少能保证还得起？（假设：家庭年还30w，采用组合贷款，其中公积金共140w，30年还清）
     2. 使用上步得到的结果，在各个区安家分别需要多少首付？（目标房价取本区的房价中位数）
-    3. 每年还款数额分别为10w、20w、30w时，最低首付如何变化？
+    3. 目标房源细化到海淀区50~100㎡，年还款数额变化为10w、20w、30w时，最低首付分布如何变化？
 
 - 租房案例研究：
     1. 本部燕园校区附近的高性价比租房房源？(假设通勤距离、租金、居住条件为主要考虑因素，在租房数据中选择出三者均合适的性价比房源)
@@ -105,7 +108,7 @@
   - https://blog.51cto.com/u_15168725/2708108
   - https://zhuanlan.zhihu.com/p/359589517
 
-- **Python代码转R**
+- **R语言二手房分析实现**
   - https://github.com/Mounment/R-Project/tree/master/上海二手房分析
 
 ## 声明
