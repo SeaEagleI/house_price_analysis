@@ -83,6 +83,21 @@ acc_fund_loan = min(70 * person, 140)
 # acc_fund_debx = calc_debx(acc_fund_loan, years, acc_fund_interest)
 # total_debx = business_debx + acc_fund_debx
 # tax: an extra part of shoufu above pure_shoufu (SKIP)
+# 	0	1
+# 总价	9400000	7250000
+# 原值	6700000.18	1160000
+# 税费合计	602449.97	1425170
+# 税费合计（万元）	60.2	142.5
+# 1.增值税	(成交价-作为增值税原值金额)/21
+# 	128571.42	290000
+# 2.增值税附加	(成交价-作为增值税原值金额)/350
+# 	7714.2852	17400
+# 	7714.28	17400
+# 3.契税	(成交价-增值税) * 0.015
+# 	134323.8574	97196.4
+# 	132021.42	98850
+# 4.个人所得税	(成交价-增值税-作为个人所得税原值金额-原契税实缴金额-增值税附加-成交价*0.1-银行利息) * 0.2
+# 	334142.85	1018920
 # shoufu
 # pure_shoufu = total_price - business_loan - acc_fund_loan
 
@@ -121,5 +136,4 @@ if __name__ == "__main__":
     print(get_max_loan(30))
     print(get_max_loan(20))
     print(get_max_loan(10))
-
 
