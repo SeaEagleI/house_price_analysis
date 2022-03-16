@@ -41,9 +41,9 @@
 
 ## Part II: 数据预处理
 
-- [文件格式转换](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/json2csv.py)：
+- [格式转换](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/json2csv.py)：
     1. 将爬取的json文件转为csv（递归处理树结构数据、使用路径重命名字段名）
-- [数据整理](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/ershoufang.py)：
+- [数据归约](https://github.com/SeaEagleI/house_price_analysis/blob/master/preprocess/ershoufang.py)：
     1. 删除冗余列、无用列；
     2. 修改列值：删除列值中的单位，并拆分、合并一些列；
     3. 重命名列名：将英文换成中文（增加可读性），在列名中加上单位。
